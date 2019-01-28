@@ -76,8 +76,7 @@ update_data <- function(data_dir = "/home/a/Dropbox/CommunityAnalysis/Allometry"
   saveRDS(final_data, file = "_data/allometry_data.rds")
 
   # Release the data to GitHub
-  datastorr::release(github_repo, "0.0.0.9000",
-                     filename = "_data/allometry_data.rds")
+  mydata_release(filename = "_data/allometry_data.rds")
 
   return(invisible())
 }
