@@ -1,0 +1,14 @@
+Package: allometrydata
+Title: Allometry data storage for the BWG
+Version: 0.0.0.9000
+Author: Alathea Letaw
+Maintainer: Alathea Letaw <alathea@lutrisanalytics.com>
+Description: Allometry data storage for the BWG
+License: MIT + file LICENSE
+LazyData: true
+URL: https://github.com/SrivastavaLab/allometrydata
+BugReports: https://github.com/SrivastavaLab/allometrydata/issues
+Imports:
+  datastorr (>= 0.0.2),
+  gdata
+RoxygenNote: 6.1.1

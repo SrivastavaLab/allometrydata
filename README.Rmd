@@ -1,0 +1,55 @@
+# datastorr.example
+
+> Example use of datastorr
+
+Example use of datastorr.
+
+## Installation
+
+```r
+devtools::install_github("richfitz/datastorr")
+devtools::install_github("richfitz/datastorr.example")
+```
+
+## Usage
+
+```{r, echo=FALSE, results="hide"}
+datastorr.example::mydata_del(NULL)
+```
+
+To start with there is no data present:
+
+```{r}
+datastorr.example::mydata_versions()
+```
+
+Though there are versions on github:
+
+```{r}
+datastorr.example::mydata_versions(local=FALSE)
+```
+
+Retrieve the data:
+
+```{r}
+system.time(d <- mydata())
+```
+
+The progress bar looks a bit messed up but should work well interactively.  The relevant time is the elapsed time, rather than user or system time.
+
+The data in all its glory:
+```
+head(d)
+```
+
+Subsequent calls are very fast:
+
+```{r}
+system.time(d <- mydata())
+```
+
+The local versions:
+
+```{r}
+datastorr.example::mydata_versions()
+```

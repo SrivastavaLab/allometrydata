@@ -1,0 +1,5 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+datastorr.json
+README.Rmd
+Makefile
