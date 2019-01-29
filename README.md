@@ -1,33 +1,54 @@
-# allometrydata
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+allometrydata
+=============
 
 Allometry data storage for the BWG.
 
-## Installation
+Installation
+------------
 
-```r
+``` r
 devtools::install_github("SrivastavaLab/allometrydata")
 ```
 
-## Data Access
+Data Access
+-----------
 
 Allometry data can be accessed directly using this package.
 
-Use `alldata()` to access the most recent version on GitHub.
-`alldata_versions(local = FALSE)` will list the versions available online.
-`alldata_versions(local = TRUE)` will list the versions available on your
-computer.
+Access the most recent version on GitHub.
 
-See `?allometrydata::alldata()` for help.
+``` r
+allometrydata::alldata()
+```
 
-## Data Versions
+List the versions available online:
 
-See (releases)[https://github.com/SrivastavaLab/allometrydata/releases}] for the
-most recent versions of the data.
+``` r
+allometrydata::alldata_versions(local = FALSE)
+#> [1] "v.0.0.0.9000"
+```
 
-## Data Update
+List the versions available on your computer:
 
-Data may be updated by an administrator by connecting to your local Dropbox
-folder: `CommunityAnalysis/Allometry`. The function `update_data` will
-compile any new XLS files from the Allometry folder with the most recent version
-of the data on GitHub. The dataset is saved locally and can be uploaded as a new
-data release.
+``` r
+allometrydata::alldata_versions()
+#> [1] "v.0.0.0.9000"
+```
+
+For help:
+
+``` r
+?allometrydata::alldata()
+```
+
+Data Versions
+-------------
+
+See [releases](https://github.com/SrivastavaLab/allometrydata/releases) for the most recent versions of the data.
+
+Data Update
+-----------
+
+Data may be updated by an administrator by connecting to your local Dropbox folder: `CommunityAnalysis/Allometry`. The function `update_data` will compile any new XLS files from the Allometry folder with the most recent version of the data on GitHub. The dataset is saved locally and can be uploaded as a new data release.

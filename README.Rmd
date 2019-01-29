@@ -1,55 +1,65 @@
-# datastorr.example
+---
+output: github_document
+---
 
-> Example use of datastorr
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-Example use of datastorr.
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# allometrydata
+
+Allometry data storage for the BWG.
 
 ## Installation
 
-```r
-devtools::install_github("richfitz/datastorr")
-devtools::install_github("richfitz/datastorr.example")
+```{r, eval = FALSE}
+devtools::install_github("SrivastavaLab/allometrydata")
 ```
 
-## Usage
+## Data Access
 
-```{r, echo=FALSE, results="hide"}
-datastorr.example::mydata_del(NULL)
+Allometry data can be accessed directly using this package.
+
+Access the most recent version on GitHub.
+
+```{r, eval = FALSE}
+allometrydata::alldata()
 ```
 
-To start with there is no data present:
+List the versions available online:
 
 ```{r}
-datastorr.example::mydata_versions()
+allometrydata::alldata_versions(local = FALSE)
 ```
 
-Though there are versions on github:
+List the versions available on your computer:
 
 ```{r}
-datastorr.example::mydata_versions(local=FALSE)
+allometrydata::alldata_versions()
 ```
 
-Retrieve the data:
+For help:
 
 ```{r}
-system.time(d <- mydata())
+?allometrydata::alldata()
 ```
 
-The progress bar looks a bit messed up but should work well interactively.  The relevant time is the elapsed time, rather than user or system time.
+## Data Versions
 
-The data in all its glory:
-```
-head(d)
-```
+See [releases](https://github.com/SrivastavaLab/allometrydata/releases) for the
+most recent versions of the data.
 
-Subsequent calls are very fast:
+## Data Update
 
-```{r}
-system.time(d <- mydata())
-```
-
-The local versions:
-
-```{r}
-datastorr.example::mydata_versions()
-```
+Data may be updated by an administrator by connecting to your local Dropbox
+folder: `CommunityAnalysis/Allometry`. The function `update_data` will
+compile any new XLS files from the Allometry folder with the most recent version
+of the data on GitHub. The dataset is saved locally and can be uploaded as a new
+data release.
