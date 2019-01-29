@@ -19,6 +19,11 @@ computer.
 
 See `?allometrydata::alldata()` for help.
 
+## Data Versions
+
+See (releases)[https://github.com/SrivastavaLab/allometrydata/releases}] for the
+most recent versions of the data.
+
 ## Data Update
 
 Data may be updated by an administrator by connecting to your local Dropbox
