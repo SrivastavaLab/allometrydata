@@ -63,3 +63,16 @@ folder: `CommunityAnalysis/Allometry`. The function `update_data` will
 compile any new XLS files from the Allometry folder with the most recent version
 of the data on GitHub. The dataset is saved locally and can be uploaded as a new
 data release.
+
+Data updates keep the original data largely as is, with a few exceptions:
+
+1) Only the following expected columns are retained: `bwg_name`, `name`,
+`length_mm`, `wet_mass_mg`, `dry_mass_mg`, `length_measured_as`,
+`number_of_individuals`, `stage`, `size_category`, `instar_number`
+2) Two columns are added to better describe the data. `file` gives the filename
+from which the line of data came. `type` distinguishes between measurements
+gathered in the field (`field_measurement`) and entries used to define a size
+category by giving a corresponding length (`category_definition`). Notably, data
+that fall into the `category_definition` type do not include biomass
+measurements as they do not represent an actual measurement.
+3) Any blanks are converted to `NA`
