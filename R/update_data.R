@@ -1,34 +1,66 @@
-update_data <- function(data_dir = "/home/a/Dropbox/CommunityAnalysis/Allometry",
-                        github_repo = "SrivastavaLab/allometrydata"){
-  # Look for Github Token or force setup of the token
-
+#' Update allometry data.
+#'
+#' Updates the allometry data sets.
+#'
+#' This compiles the most recent release of allometry data and adds data from
+#' any new allometry data files. Inputs should be XLS files located in
+#' \code{../Dropbox/CommunityAnalysis/Allometry}
+#'
+#' @param dropbox_dir character string indicating the location of your Dropbox
+#'   folder. The allometry XLS files are assumed to be in the shared folder:
+#'   \code{../CommunityAnalysis/Allometry}
+#' @param data_dir character string indicating the directory in which the
+#'   compiled data will be saved.
+#' @param return_data logical indicating whether or not the data should be
+#'   returned after running the update. If no new data are found, nothing
+#'   will be returned.
+#' @return Saves the compiled data set as an RDS file in the chosen directory.
+#'   It is expected that this file will be uploaded to the GitHub repository
+#'   as a new release. The data frame of updated data is optionally returned.
+#' @examples
+#' @export
+#' 
+update_data <- function(data_dir, dropbox_dir = "/home/a/Dropbox",
+                        return_data = FALSE){
+  ## To Do:
+  ## * Adjust path specification so it will work between operating systems
+  
+  # I/O Variables
+  github_repo    <- "SrivastavaLab/allometrydata"
+  dropbox_folder <- paste(dropbox_dir, "CommunityAnalysis/Allometry", sep = "/")
+  allometry_filename <- paste(
+    data_dir, "/", format(Sys.time(),"%Y%m%d"), "_allometry_data.rds", sep = ""
+    )
+  
+  # Welcome message
+  cat("Updating allometry data sets...\n")
+  
   # Try to get the latest version of the data from GitHub.
-  # If there is no data (thereby generating an error), allometry_data
-  # will be set to FALSE.
+  # If there is no data (thereby generating an error), all XLS files are used.
   allometry_data <- try(datastorr::datastorr(repo = github_repo), silent = TRUE)
-
+  
+  # Create list of XLS files in dropbox_dir
+  allometry_files <- list.files(dropbox_folder, pattern = ".xls")
+  
+  # Use the list of files if new data has been released. Otherwise use only
+  # the new files
   if(class(allometry_data) == "try-error"){
-    allometry_data <- NA
-  }
-
-  # Create list of files in data_dir (should definitely be in Dropbox)
-  # Possibly restrict this to the Dropbox/CommunityAnalysis/Allometry folder
-  # For now, I can keep it in my data_dir so it won't really work otherwise
-  allometry_files <- list.files(data_dir, pattern = ".xls")
-
-  # Check the list of file names against those ones attached to the data set
-  if(is.na(allometry_data)){
     new_files <- allometry_files
   } else {
-    # Get the list of only new files
+    old_files <- unique(allometry_data$file)
+    new_files <- allometry_files[!which(allometry_files %in% old_files)]
+    
+    # Exit if there are no new files
+    if(length(new_files) == 0){
+      cat("No new data found. Exiting update process.")
+      return(invisible())
+    }
   }
 
   # Import data from any files that are not already listed
-  # Slash direction needs to depend on OS
-  # May need to do some editing of data types
   for(i in 1:length(new_files)){
     filename  <- new_files[i]
-    file_path <- paste(data_dir, filename, sep = "/")
+    file_path <- paste(dropbox_folder, filename, sep = "/")
 
     temp_data <- gdata::read.xls(file_path, sheet = 1, method = "csv",
                                  encoding = "UTF-8", stringsAsFactors = F)
@@ -66,17 +98,22 @@ update_data <- function(data_dir = "/home/a/Dropbox/CommunityAnalysis/Allometry"
   }
 
   # Update the data frame
-  if(is.na(allometry_data)){
+  if(class(allometry_data) == "try-error"){
     final_data <- all_data
   } else{
     final_data <- rbind(allometry_data, all_data)
   }
 
   # Save data
-  saveRDS(final_data, file = "_data/allometry_data.rds")
+  saveRDS(final_data, file = allometry_filename)
+  
+  # Completion message
+  cat(paste("Data saved to", allometry_filename, "\n", sep = " "))
 
-  # Release the data to GitHub
-  mydata_release(filename = "_data/allometry_data.rds")
-
-  return(invisible())
+  # Return the updated dataset if desired
+  if(return_data){
+    return(final_data)
+  } else {
+    return(invisible())
+  }
 }
