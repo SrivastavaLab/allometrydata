@@ -37,7 +37,9 @@ update_data <- function(data_dir, dropbox_dir = "/home/a/Dropbox",
   
   # Try to get the latest version of the data from GitHub.
   # If there is no data (thereby generating an error), all XLS files are used.
-  allometry_data <- try(datastorr::datastorr(repo = github_repo), silent = TRUE)
+  allometry_data <- try(
+    datastorr::datastorr(repo = github_repo, refetch = TRUE),
+    silent = TRUE)
   
   # Create list of XLS files in dropbox_dir
   allometry_files <- list.files(dropbox_folder, pattern = ".xls")
@@ -63,7 +65,8 @@ update_data <- function(data_dir, dropbox_dir = "/home/a/Dropbox",
     file_path <- paste(dropbox_folder, filename, sep = "/")
 
     temp_data <- gdata::read.xls(file_path, sheet = 1, method = "csv",
-                                 encoding = "UTF-8", stringsAsFactors = F)
+                                 encoding = "UTF-8", stringsAsFactors = F,
+                                 na.strings = c("", "NA"))
 
     # Select the expected list of column names.  Extra columns will disappear.
     # Gives error if column is missing.
@@ -83,7 +86,7 @@ update_data <- function(data_dir, dropbox_dir = "/home/a/Dropbox",
       all_data <- rbind(all_data, temp_data)
     }
   }
-
+  
   # Add a column for data type (measurement vs. category definition)
   all_data$type <- NA
   for(i in 1:nrow(all_data)){
@@ -97,7 +100,7 @@ update_data <- function(data_dir, dropbox_dir = "/home/a/Dropbox",
     }
   }
 
-  # Update the data frame
+  # Update the existing data
   if(class(allometry_data) == "try-error"){
     final_data <- all_data
   } else{
